@@ -8,9 +8,12 @@ import 'vue-material/dist/theme/default.css'
 import ppRouter from './PpRouter'
 import ppStore from './PpStore'
 
+import Vuelidate from 'vuelidate'
+
 Vue.config.productionTip = false
 
 Vue.use(VueMaterial)
+Vue.use(Vuelidate)
 
 new Vue({
   router: ppRouter,
