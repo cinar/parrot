@@ -27,7 +27,7 @@
       </md-toolbar>
 
       <md-list>
-        <md-list-item to="/">
+        <md-list-item v-on:click="listClips()">
           <md-icon>list</md-icon>
           <span class="md-list-item-text">List</span>
         </md-list-item>
@@ -56,8 +56,14 @@ export default {
       this.menuVisible = !this.menuVisible
     },
 
+    listClips() {
+      this.$router.push({ path: '/' })
+      this.toggleMenu()
+    },
+
     clearClips() {
       this.$store.dispatch('clearClips')
+      this.toggleMenu()
     }
   }
 }
