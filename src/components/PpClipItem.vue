@@ -32,7 +32,7 @@ export default {
       if (!this.playing) {
         this.playing = true
 
-        const mediaPlayer = new Audio(URL.createObjectURL(this.clip.audio))
+        const mediaPlayer = new Audio(this.clip.audio)
         const vm = this
 
         mediaPlayer.onended = function() {

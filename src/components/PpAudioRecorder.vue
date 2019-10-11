@@ -60,15 +60,13 @@ export default {
           vm.mediaRecorder = new MediaRecorder(stream)
 
           vm.mediaRecorder.ondataavailable = function(e) {
-            vm.audio = e.data
+            vm.saveAudio(e.data)
           }
 
           vm.mediaRecorder.onstop = function() {
             stream.getTracks().forEach(function(track) {
               track.stop()
             })
-
-            vm.$emit('input', vm.audio)
           }
 
           vm.timer()
@@ -80,7 +78,7 @@ export default {
       const vm = this
 
       this.playing = true
-      this.mediaPlayer = new Audio(URL.createObjectURL(this.audio))
+      this.mediaPlayer = new Audio(this.audio)
 
       this.mediaPlayer.onended = function() {
         vm.playing = false
@@ -112,6 +110,18 @@ export default {
       } else {
         this.duration = 0
       }
+    },
+
+    saveAudio: function(blob) {
+      const fileReader = new FileReader()
+      const vm = this
+
+      fileReader.onload = function(e) {
+        vm.audio = e.target.result
+        vm.$emit('input', vm.audio)
+      }
+
+      fileReader.readAsDataURL(blob)
     }
   }
 }
