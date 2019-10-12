@@ -18,6 +18,13 @@ export default new Vuex.Store({
       state.clips.push(clip)
     },
 
+    removeClip(state, clip) {
+      const index = state.clips.indexOf(clip)
+      if (index > -1) {
+        state.clips.splice(index, 1)
+      }
+    },
+
     clearClips(state) {
       state.clips.splice(0, state.clips.length)
     }
@@ -25,6 +32,10 @@ export default new Vuex.Store({
   actions: {
     addClip(context, clip) {
       context.commit('addClip', clip)
+    },
+
+    removeClip(context, clip) {
+      context.commit('removeClip', clip)
     },
 
     clearClips(context) {

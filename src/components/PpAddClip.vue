@@ -92,7 +92,6 @@ export default {
       }
 
       this.$store.dispatch('addClip', this.clip)
-
       this.$router.push({ path: '/' })
     }
   }
@@ -101,7 +100,7 @@ export default {
 
 <style scoped>
 .pp-audio-recorder-field {
-  display: flex;
-  align-items: baseline;
+  padding-top: 4em;
+  padding-bottom: 1em;
 }
 </style>

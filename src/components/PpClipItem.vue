@@ -3,7 +3,10 @@
     <div class="pp-clip-item-content" 
          v-bind:class="backgroundColor"
          v-on:click="play()"
-    >{{clip.name}}</div>
+         v-on:dblclick="remove()"
+    >
+      <span class="md-title pp-clip-item-name">{{clip.name}}</span>
+    </div>
   </div>
 </template>
 
@@ -41,6 +44,11 @@ export default {
 
         mediaPlayer.play()
       }
+    },
+
+    remove: function() {
+      this.$store.dispatch('removeClip', this.clip)
+      this.$router.push({ path: '/' })
     }
   }
 }
@@ -68,5 +76,9 @@ export default {
 
 .pp-background-yellow {
   background-color: yellow;
+}
+
+.pp-clip-item-name {
+  color: white;
 }
 </style>
