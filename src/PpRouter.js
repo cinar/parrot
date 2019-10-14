@@ -19,6 +19,10 @@ export default new Router({
       path: '/add',
       name: 'pp-add-clip',
       component: PpAddClip
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })
