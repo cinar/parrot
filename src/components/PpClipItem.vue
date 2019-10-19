@@ -1,12 +1,48 @@
 <template>
-  <div class="md-layout-item md-size-50">
-    <div class="pp-clip-item-content" 
-         v-bind:class="backgroundColor"
-         v-on:click="play()"
-         v-on:dblclick="remove()"
-    >
-      <span class="md-title pp-clip-item-name">{{clip.name}}</span>
-    </div>
+  <div>
+  <v-card
+    v-bind:color="backgroundColor"
+    v-on:click="play()"
+    v-on:dblclick="removeDialog = true"
+    height="120"
+    class="d-flex align-center"
+    dark
+  >
+    <v-card-text class="headline text-center">{{clip.name}}</v-card-text>
+  </v-card>
+
+  <v-dialog
+    v-model="removeDialog"
+  >
+    <v-card>
+      <v-card-title class="headline">
+        Remove Clip?
+      </v-card-title>
+
+      <v-card-text>
+        Do you want to remove {{clip.name}}?
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn
+          v-on:click="remove()"
+          text
+        >
+          Yes
+        </v-btn>
+
+        <v-btn
+          v-on:click="removeDialog = false"
+          text
+        >
+          No
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
   </div>
 </template>
 
@@ -20,13 +56,14 @@ export default {
 
   data: function() {
     return {
-      playing: false
+      playing: false,
+      removeDialog: false
     }
   },
 
   computed: {
     backgroundColor() {
-      return 'pp-background-' + this.clip.color
+      return this.clip.color.toLowerCase()
     }
   },
 
@@ -55,30 +92,4 @@ export default {
 </script>
 
 <style scoped>
-.pp-clip-item-content {
-  margin: 2px;
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
-}
-
-.pp-background-red {
-  background-color: red;
-}
-
-.pp-background-green {
-  background-color: green;
-}
-
-.pp-background-blue {
-  background-color: blue;
-}
-
-.pp-background-yellow {
-  background-color: yellow;
-}
-
-.pp-clip-item-name {
-  color: white;
-}
 </style>

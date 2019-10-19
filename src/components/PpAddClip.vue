@@ -1,41 +1,41 @@
 <template>
-  <div>
-    <md-field v-bind:class="fieldClass('name')">
-      <label>Name</label>
-      <md-input v-model="$v.clip.name.$model"></md-input>
-      <span class="md-error" v-if="!$v.clip.name.required">The name is required.</span>
-      <span class="md-error" v-if="!$v.clip.name.minLength">The name must be 4 or more characters.</span>
-    </md-field>
+  <v-container>
+  <v-form 
+    v-model="valid"
+    ref="form"
+    lazy-validation
+  >
+    <v-text-field
+      v-model="clip.name"
+      v-bind:rules="rules.name"
+      label="Name"
+      placeholder="Name of the clip."
+      outlined
+    ></v-text-field>
 
-    <md-field v-bind:class="fieldClass('color')">
-      <label>Color</label>
-      <md-select v-model="$v.clip.color.$model">
-        <md-option value="red">Red</md-option>
-        <md-option value="green">Green</md-option>
-        <md-option value="blue">Blue</md-option>
-        <md-option value="yellow">Yellow</md-option>
-      </md-select>
-      <span class="md-error" v-if="!$v.clip.color.required">The color is required.</span>
-    </md-field>
+    <v-select
+      v-model="clip.color"
+      v-bind:rules="rules.color"
+      v-bind:items="colors"
+      label="Color"
+      outlined
+    ></v-select>
 
-    <md-field class="pp-audio-recorder-field" v-bind:class="fieldClass('audio')">
-      <label>Audio Clip</label>
-      <pp-audio-recorder v-model="clip.audio" />
-      <span class="md-error" v-if="!$v.clip.audio.required">The audio clip is required.</span>
-    </md-field>
+    <pp-audio-recorder 
+      v-model="clip.audio"
+    ></pp-audio-recorder>
 
-    <div>
-      {{clipSize}}
-    </div>
-
-    <md-button class="md-primary md-raised" v-on:click="add()">
+    <v-btn 
+      v-on:click="add()"
+      color="primary"
+    >
       Add
-    </md-button>
-  </div>
+    </v-btn>
+  </v-form>
+  </v-container>
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
 import PpAudioRecorder from './PpAudioRecorder.vue'
 
 export default {
@@ -43,31 +43,35 @@ export default {
 
   data: function () {
     return {
+      valid: true,
+
       clip: {
         name: null,
         color: null,
         audio: null
-      }
+      },
+
+      rules: {
+        name: [
+          v => !!v || 'The name is required',
+          v => (v && v.length > 4) || 'The name must be 4 characters or more.'
+        ],
+        color: [
+          v => !!v || 'The color is required'
+        ]
+      },
+
+      colors: [
+        'Red',
+        'Green',
+        'Blue',
+        'Yellow'
+      ]
     }
   },
 
   components: {
     PpAudioRecorder
-  },
-
-  validations: {
-    clip: {
-      name: {
-        required,
-        minLength: minLength(4)
-      },
-      color: {
-        required
-      },
-      audio: {
-        required
-      }
-    }
   },
 
   computed: {
@@ -77,30 +81,15 @@ export default {
   },
 
   methods: {
-    fieldClass: function(fieldName) {
-      const field = this.$v.clip[fieldName]
-
-      return {
-        'md-invalid': field.$invalid && field.$dirty
-      }
-    },
-
     add: function() {
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        return;
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('addClip', this.clip)
+        this.$router.push({ path: '/' })
       }
-
-      this.$store.dispatch('addClip', this.clip)
-      this.$router.push({ path: '/' })
     }
   }
 }
 </script>
 
 <style scoped>
-.pp-audio-recorder-field {
-  padding-top: 4em;
-  padding-bottom: 1em;
-}
 </style>

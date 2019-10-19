@@ -1,28 +1,47 @@
 <template>
-  <div>
-    <md-button
-      class="md-icon-button md-raised md-accent"
-      v-if="!recording && !playing"
-      v-on:click="record()"
-    >
-      <md-icon>mic</md-icon>
-    </md-button>
-    <md-button
-      class="md-icon-button md-raised md-primary"
-      v-if="audio && (!recording && !playing)"
-      v-on:click="play()"
-    >
-      <md-icon>play_arrow</md-icon>
-    </md-button>
-    <md-button
-      class="md-icon-button md-accent"
-      v-if="recording"
-      v-on:click="stop()"
-    >
-      <md-icon>stop</md-icon>
-    </md-button>
-    <span class="pp-blink" v-if="recording">Recording... ({{duration}} seconds.)</span>
-    <span v-if="playing">Playing...</span>
+  <div class="pp-audio-recorder">
+  <v-card class="d-flex pp-card" height="60" outlined>
+    <v-card-actions>
+        <v-btn
+          v-if="!recording && !playing"
+          v-on:click="record()"
+          color="red"
+          dark
+        >
+          <v-icon>mdi-microphone</v-icon>
+          Record
+        </v-btn>
+        <v-btn
+          v-if="audio && (!recording && !playing)"
+          v-on:click="play()"
+          color="primary"
+          dark
+        >
+          <v-icon>mdi-play</v-icon>
+          Play
+        </v-btn>
+        <v-btn
+          v-if="recording"
+          v-on:click="stop()"
+          color="red"
+          dark
+        >
+          <v-icon>mdi-stop</v-icon>
+          Stop
+        </v-btn>
+        <span class="pp-status" v-if="recording">Recording... ({{duration}} seconds.)</span>
+        <span class="pp-status" v-if="playing">Playing...</span>
+    </v-card-actions>
+  </v-card>
+  <div class="v-text-field__details">
+    <div class="v-messages theme--light error--text" role="alert">
+      <div class="v-messages__wrapper">
+        <div class="v-messages_message">
+          <span class="pp-error">Error</span>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -128,20 +147,16 @@ export default {
 </script>
 
 <style scoped>
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.5; }
-    to { opacity: 1.0; }
+.pp-audio-recorder {
+  margin-bottom: 12px;
 }
 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.5; }
-    to { opacity: 1.0; }
+.pp-status {
+  margin-left: 1em;
 }
 
-.pp-blink {
-  animation:fade 1000ms infinite;
-  -webkit-animation:fade 1000ms infinite;
+.pp-error {
+  margin-left: 12px;
+  visibility: hidden;
 }
 </style>

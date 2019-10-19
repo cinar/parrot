@@ -1,78 +1,88 @@
 <template>
-  <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-section-start" v-if="!menuVisible">
-        <md-button class="md-icon-button" v-on:click="toggleMenu()">
-          <md-icon>menu</md-icon>
-        </md-button>
-        <span class="md-title">Parrent Parrot</span>
-      </div>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" app>
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="images/parrot-192.png"></v-img>
+        </v-list-item-avatar>
 
-      <div class="md-toolbar-section-end">
-        <md-button class="md-icon-button" to="/add">
-          <md-icon>add</md-icon>
-        </md-button>
-      </div>
-    </md-app-toolbar>
+        <v-list-item-title>Parent Parrot</v-list-item-title>
+      </v-list-item>
 
-    <md-app-drawer :md-active.sync="menuVisible">
-      <md-toolbar class="md-transparent" md-elevation="0">
-        <span class="md-title">Menu</span>
+      <v-divider></v-divider>
 
-        <div class="md-toolbar-section-end">
-          <md-button class="md-icon-button md-dense" v-on:click="toggleMenu()">
-            <md-icon>keyboard_arrow_left</md-icon>
-          </md-button>
-        </div>
-      </md-toolbar>
+      <v-list dense>
+        <v-list-item v-on:click="listClips()">
+          <v-list-item-action>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            List Clips
+          </v-list-item-content>
+        </v-list-item>
 
-      <md-list>
-        <md-list-item v-on:click="listClips()">
-          <md-icon>list</md-icon>
-          <span class="md-list-item-text">List</span>
-        </md-list-item>
+        <v-list-item v-on:click="clearClips()">
+          <v-list-item-action>
+            <v-icon>mdi-trash-can</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            Clear Clips
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-        <md-list-item v-on:click="clearClips()">
-          <md-icon>clear</md-icon>
-          <span class="md-list-item-text">Clear</span>
-        </md-list-item>
-      </md-list>
-    </md-app-drawer>
+    <v-app-bar app color="blue" dark>
+      <v-app-bar-nav-icon v-on:click.stop="toggleDrawer()"></v-app-bar-nav-icon>
 
-    <md-app-content>
-      <router-view />
-    </md-app-content>
-  </md-app>
+      <v-toolbar-title>Parent Parrot</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon v-on:click="addClip()">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-content>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 export default {
   name: 'app',
-  data: () =>  ({
-    menuVisible: false
-  }),
+
+  data: function() {
+    return {
+      drawer: false
+    }
+  },
+
   methods: {
-    toggleMenu() {
-      this.menuVisible = !this.menuVisible
+    toggleDrawer: function() {
+      this.drawer = !this.drawer
     },
 
-    listClips() {
+    addClip: function() {
+      this.$router.push({ path: '/add' })
+    },
+
+    listClips: function() {
       this.$router.push({ path: '/' })
-      this.toggleMenu()
+      this.toggleDrawer()
     },
 
-    clearClips() {
+    clearClips: function() {
       this.$store.dispatch('clearClips')
-      this.toggleMenu()
+      this.toggleDrawer()
     }
   }
 }
 </script>
 
 <style>
-.md-app {
-  min-height: 100vh;
-  max-height: 100vh;
-}
-
 </style>
