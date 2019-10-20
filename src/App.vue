@@ -16,18 +16,14 @@
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
-          <v-list-item-content>
-            List Clips
-          </v-list-item-content>
+          <v-list-item-content>List Clips</v-list-item-content>
         </v-list-item>
 
         <v-list-item v-on:click="clearClips()">
           <v-list-item-action>
             <v-icon>mdi-trash-can</v-icon>
           </v-list-item-action>
-          <v-list-item-content>
-            Clear Clips
-          </v-list-item-content>
+          <v-list-item-content>Clear Clips</v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -39,9 +35,17 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon v-on:click="addClip()">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <v-bottom-sheet v-model="addClipSheet">
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-subheader>Add Clip</v-subheader>
+          <pp-add-clip v-model="addClipSheet"></pp-add-clip>
+        </v-list>
+      </v-bottom-sheet>
     </v-app-bar>
 
     <v-content>
@@ -53,13 +57,20 @@
 </template>
 
 <script>
+import PpAddClip from "./components/PpAddClip.vue"
+
 export default {
-  name: 'app',
+  name: "app",
 
   data: function() {
     return {
-      drawer: false
+      drawer: false,
+      addClipSheet: false
     }
+  },
+
+  components: {
+    PpAddClip
   },
 
   methods: {
@@ -67,17 +78,13 @@ export default {
       this.drawer = !this.drawer
     },
 
-    addClip: function() {
-      this.$router.push({ path: '/add' })
-    },
-
     listClips: function() {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: "/" })
       this.toggleDrawer()
     },
 
     clearClips: function() {
-      this.$store.dispatch('clearClips')
+      this.$store.dispatch("clearClips")
       this.toggleDrawer()
     }
   }

@@ -1,57 +1,37 @@
 <template>
   <div class="pp-audio-recorder">
-  <v-card class="d-flex pp-card" height="60" outlined>
-    <v-card-actions>
-        <v-btn
-          v-if="!recording && !playing"
-          v-on:click="record()"
-          color="red"
-          dark
-        >
-          <v-icon>mdi-microphone</v-icon>
-          Record
+    <v-card class="d-flex pp-card" height="60" outlined>
+      <v-card-actions>
+        <v-btn v-if="!recording && !playing" v-on:click="record()" color="red" dark>
+          <v-icon>mdi-microphone</v-icon>Record
         </v-btn>
-        <v-btn
-          v-if="audio && (!recording && !playing)"
-          v-on:click="play()"
-          color="primary"
-          dark
-        >
-          <v-icon>mdi-play</v-icon>
-          Play
+        <v-btn v-if="audio && (!recording && !playing)" v-on:click="play()" color="primary" dark>
+          <v-icon>mdi-play</v-icon>Play
         </v-btn>
-        <v-btn
-          v-if="recording"
-          v-on:click="stop()"
-          color="red"
-          dark
-        >
-          <v-icon>mdi-stop</v-icon>
-          Stop
+        <v-btn v-if="recording" v-on:click="stop()" color="red" dark>
+          <v-icon>mdi-stop</v-icon>Stop
         </v-btn>
         <span class="pp-status" v-if="recording">Recording... ({{duration}} seconds.)</span>
         <span class="pp-status" v-if="playing">Playing...</span>
-    </v-card-actions>
-  </v-card>
-  <div class="v-text-field__details">
-    <div class="v-messages theme--light error--text" role="alert">
-      <div class="v-messages__wrapper">
-        <div class="v-messages_message">
-          <span class="pp-error">Error</span>
+      </v-card-actions>
+    </v-card>
+    <div class="v-text-field__details">
+      <div class="v-messages theme--light error--text" role="alert">
+        <div class="v-messages__wrapper">
+          <div class="v-messages_message">
+            <span class="pp-error">Error</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'pp-audio-recorder',
+  name: "pp-audio-recorder",
 
-  prop: [
-    'value'
-  ],
+  prop: ["value"],
 
   data: function() {
     return {
@@ -122,7 +102,7 @@ export default {
       if (this.recording) {
         const vm = this
 
-        setTimeout(function () {
+        setTimeout(function() {
           vm.duration++
           vm.timer()
         }, 1000)
@@ -137,7 +117,7 @@ export default {
 
       fileReader.onload = function(e) {
         vm.audio = e.target.result
-        vm.$emit('input', vm.audio)
+        vm.$emit("input", vm.audio)
       }
 
       fileReader.readAsDataURL(blob)

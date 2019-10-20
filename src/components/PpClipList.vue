@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import PpClipItem from './PpClipItem.vue'
+import PpClipItem from "./PpClipItem.vue"
 
 export default {
-  name: 'pp-clip-list',
+  name: "pp-clip-list",
 
   components: {
     PpClipItem
@@ -21,5 +21,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
