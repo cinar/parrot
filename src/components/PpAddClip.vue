@@ -17,7 +17,7 @@
         outlined
       ></v-select>
 
-      <pp-audio-recorder v-model="clip.audio"></pp-audio-recorder>
+      <pp-audio-recorder v-model="clip.audio" ref="recorder"></pp-audio-recorder>
 
       <v-btn v-on:click="add()" color="primary">Add</v-btn>
     </v-form>
@@ -67,9 +67,16 @@ export default {
   methods: {
     add: function() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch("addClip", this.clip)
+        this.$store.dispatch("addClip", Object.assign({}, this.clip))
         this.$emit("input", false)
+        this.reset()
       }
+    },
+
+    reset: function() {
+      this.$refs.form.reset()
+      this.$refs.form.resetValidation()
+      this.$refs.recorder.reset()
     }
   }
 }

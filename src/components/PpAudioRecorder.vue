@@ -121,6 +121,10 @@ export default {
       }
 
       fileReader.readAsDataURL(blob)
+    },
+
+    reset: function() {
+      this.audio = null
     }
   }
 }
