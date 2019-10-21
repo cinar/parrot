@@ -44,22 +44,9 @@
 
     <v-app-bar app color="blue" dark>
       <v-app-bar-nav-icon v-on:click.stop="toggleDrawer()"></v-app-bar-nav-icon>
-
       <v-toolbar-title>Parent Parrot</v-toolbar-title>
-
       <v-spacer></v-spacer>
-
-      <v-bottom-sheet v-model="addClipSheet">
-        <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-subheader>Add Clip</v-subheader>
-          <pp-add-clip v-model="addClipSheet"></pp-add-clip>
-        </v-list>
-      </v-bottom-sheet>
+      <pp-add-clip-bottom-sheet></pp-add-clip-bottom-sheet>
     </v-app-bar>
 
     <v-content>
@@ -75,20 +62,19 @@
 </template>
 
 <script>
-import PpAddClip from "./components/PpAddClip.vue"
+import PpAddClipBottomSheet from './components/PpAddClipBottomSheet.vue'
 
 export default {
   name: "app",
 
   data: function() {
     return {
-      drawer: false,
-      addClipSheet: false
+      drawer: false
     }
   },
 
   components: {
-    PpAddClip
+    PpAddClipBottomSheet
   },
 
   computed: {
