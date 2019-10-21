@@ -4,6 +4,7 @@ import App from './App.vue'
 import ppRouter from './PpRouter'
 import ppStore from './PpStore'
 import ppVuetify from './PpVuetify'
+import './PpRegisterServiceWorker'
 
 Vue.config.productionTip = false
 
