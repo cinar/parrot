@@ -25,6 +25,20 @@
           </v-list-item-action>
           <v-list-item-content>Clear Clips</v-list-item-content>
         </v-list-item>
+
+        <v-list-item v-if="!isLoggedIn" v-on:click="login()">
+          <v-list-item-action>
+            <v-icon>mdi-login</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>Login</v-list-item-content>
+        </v-list-item>
+
+        <v-list-item v-if="isLoggedIn" v-on:click="logout()">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>Logout</v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -53,6 +67,10 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+
+    <v-snackbar v-model="error" bottom color="error" timeout="5000">
+      {{ error }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -73,6 +91,16 @@ export default {
     PpAddClip
   },
 
+  computed: {
+    error: function() {
+      return this.$store.getters.error
+    },
+
+    isLoggedIn: function() {
+      return this.$store.getters.user != null
+    }
+  },
+
   methods: {
     toggleDrawer: function() {
       this.drawer = !this.drawer
@@ -86,6 +114,14 @@ export default {
     clearClips: function() {
       this.$store.dispatch("clearClips")
       this.toggleDrawer()
+    },
+
+    login: function() {
+      this.$store.dispatch('login')
+    },
+
+    logout: function() {
+      this.$store.dispatch('logout')
     }
   }
 }
