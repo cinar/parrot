@@ -9,15 +9,6 @@ import { vuexfireMutations, firestoreAction } from 'vuexfire'
 
 Vue.use(Vuex)
 
-/*
-import VuexPersist from 'vuex-persist'
-
-const vuexLocalStorage = new VuexPersist({
-  key: 'vuex',
-  storage: window.localStorage
-})
-*/
-
 const firebaseConfig = {
   apiKey: "***REMOVED***",
   authDomain: "***REMOVED***",
