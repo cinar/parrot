@@ -3,10 +3,10 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-avatar>
-          <v-img src="images/parrot-192.png"></v-img>
+          <v-img v-bind:src="photoURL"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>Parent Parrot</v-list-item-title>
+        <v-list-item-title>{{ displayName }}</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -68,7 +68,7 @@
       </v-container>
     </v-content>
 
-    <v-snackbar v-model="error" bottom color="error" timeout="5000">
+    <v-snackbar v-model="error" bottom color="error">
       {{ error }}
     </v-snackbar>
   </v-app>
@@ -93,11 +93,27 @@ export default {
 
   computed: {
     error: function() {
-      return this.$store.getters.error
+      return this.$store.state.error
     },
 
     isLoggedIn: function() {
       return this.$store.getters.user != null
+    },
+
+    displayName: function() {
+      if (this.$store.getters.user != null) {
+        return this.$store.getters.user.displayName
+      } else {
+        return 'Parrent Parrot'
+      }
+    },
+
+    photoURL: function() {
+      if (this.$store.getters.user != null) {
+        return this.$store.getters.user.photoURL
+      } else {
+        return 'images/parrot-192.png'
+      }
     }
   },
 

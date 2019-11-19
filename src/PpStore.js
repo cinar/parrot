@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersist from 'vuex-persist'
+
 import firebase from 'firebase/app'
 import 'firebase/auth'
+
+import { vuexfireMutations, firestoreAction } from 'vuexfire'
 
 Vue.use(Vuex)
 
@@ -24,6 +27,11 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
+const ANONYMOUS_USER = {
+  displayName: 'Parrent Parrot',
+  photoURL: 'images/parrot-192.png'
+}
+
 export default new Vuex.Store({
   state: {
     user: null,
@@ -32,6 +40,8 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    vuexfireMutations,
+
     setUser(state, user) {
       state.user = user
     },
@@ -52,19 +62,39 @@ export default new Vuex.Store({
     },
 
     setError(state, error) {
+      // eslint-disable-next-line
+      console.log('setError' + error)
       state.error = error
     }
   },
 
   actions: {
-    login({commit}) {
+    bindRef: firestoreAction(function(context) {
+      const uid = firebase.auth().currentUser.uid
+      return context.bindFirestoreRef('clips', db.collection('users').doc(uid).collection('clips'))
+    }),
+    
+    login({commit, dispatch}) {
       const provider = new firebase.auth.GoogleAuthProvider()
 
       firebase.auth().signInWithPopup(provider).then(function(result) {
         commit('setUser', result.user)
+        dispatch('bindRef')
       }).catch(function(error) {
         commit('setError', error.message)
       })
+    },
+
+    logout({commit}) {
+      firebase.auth().signOut().then(function() {
+        commit('setUser', ANONYMOUS_USER)
+      }).catch(function(error) {
+        commit('setError', error.message)
+      })
+    },
+
+    clearError({commit}) {
+      commit('setError', null)
     },
 
     addClip(context, clip) {
