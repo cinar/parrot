@@ -3,7 +3,7 @@
     <v-card
       v-bind:color="backgroundColor"
       v-on:click="play()"
-      v-on:dblclick="remove()"
+      v-on:dblclick.stop="remove()"
       height="120"
       class="d-flex align-center"
       dark

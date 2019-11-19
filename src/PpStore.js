@@ -1,18 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VuexPersist from 'vuex-persist'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/firestore'
 
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 
 Vue.use(Vuex)
 
+/*
+import VuexPersist from 'vuex-persist'
+
 const vuexLocalStorage = new VuexPersist({
   key: 'vuex',
   storage: window.localStorage
 })
+*/
 
 const firebaseConfig = {
   apiKey: "***REMOVED***",
@@ -27,38 +31,32 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
+const db = firebase.firestore()
+
 const ANONYMOUS_USER = {
   displayName: 'Parrent Parrot',
-  photoURL: 'images/parrot-192.png'
+  photoURL: 'images/parrot-192.png',
+  isAnonymous: true
+}
+
+function getClipsCollection() {
+  return db.collection('users')
+    .doc(firebase.auth().currentUser.uid)
+    .collection('clips')
 }
 
 export default new Vuex.Store({
   state: {
-    user: null,
+    user: ANONYMOUS_USER,
     clips: [],
     error: null
   },
 
   mutations: {
-    vuexfireMutations,
+    ...vuexfireMutations,
 
     setUser(state, user) {
       state.user = user
-    },
-
-    addClip(state, clip) {
-      state.clips.push(clip)
-    },
-
-    removeClip(state, clip) {
-      const index = state.clips.indexOf(clip)
-      if (index > -1) {
-        state.clips.splice(index, 1)
-      }
-    },
-
-    clearClips(state) {
-      state.clips.splice(0, state.clips.length)
     },
 
     setError(state, error) {
@@ -69,44 +67,55 @@ export default new Vuex.Store({
   },
 
   actions: {
-    bindRef: firestoreAction(function(context) {
-      const uid = firebase.auth().currentUser.uid
-      return context.bindFirestoreRef('clips', db.collection('users').doc(uid).collection('clips'))
+    init({ commit, dispatch }) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          commit('setUser', {
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            isAnonymous: false
+          })
+
+          dispatch('bindClips')
+        } else {
+          commit('setUser', ANONYMOUS_USER)
+          dispatch('unbindClips')  
+        }
+      })
+    },
+
+    bindClips: firestoreAction(function (context) {
+      context.bindFirestoreRef('clips', getClipsCollection().orderBy('name'))
     }),
-    
-    login({commit, dispatch}) {
+
+    unbindClips: firestoreAction(function (context) {
+      context.unbindFirestoreRef('clips')
+    }),
+
+    addClip: firestoreAction(function (context, clip) {
+      getClipsCollection().add(clip)
+    }),
+
+    removeClip: firestoreAction(function (context, clip) {
+      getClipsCollection().doc(clip.id).delete()
+    }),
+
+    login({ commit }) {
       const provider = new firebase.auth.GoogleAuthProvider()
 
-      firebase.auth().signInWithPopup(provider).then(function(result) {
-        commit('setUser', result.user)
-        dispatch('bindRef')
-      }).catch(function(error) {
+      firebase.auth().signInWithPopup(provider).catch(function (error) {
         commit('setError', error.message)
       })
     },
 
-    logout({commit}) {
-      firebase.auth().signOut().then(function() {
-        commit('setUser', ANONYMOUS_USER)
-      }).catch(function(error) {
+    logout({ commit }) {
+      firebase.auth().signOut().catch(function (error) {
         commit('setError', error.message)
       })
     },
 
-    clearError({commit}) {
+    clearError({ commit }) {
       commit('setError', null)
-    },
-
-    addClip(context, clip) {
-      context.commit('addClip', clip)
-    },
-
-    removeClip(context, clip) {
-      context.commit('removeClip', clip)
-    },
-
-    clearClips(context) {
-      context.commit('clearClips')
     }
   },
 
@@ -121,6 +130,6 @@ export default new Vuex.Store({
   },
 
   plugins: [
-    vuexLocalStorage.plugin
+    // vuexLocalStorage.plugin
   ]
 })

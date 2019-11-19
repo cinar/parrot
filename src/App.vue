@@ -3,10 +3,10 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-avatar>
-          <v-img v-bind:src="photoURL"></v-img>
+          <v-img v-bind:src="user.photoURL"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>{{ displayName }}</v-list-item-title>
+        <v-list-item-title>{{ user.displayName }}</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -19,21 +19,14 @@
           <v-list-item-content>List Clips</v-list-item-content>
         </v-list-item>
 
-        <v-list-item v-on:click="clearClips()">
-          <v-list-item-action>
-            <v-icon>mdi-trash-can</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>Clear Clips</v-list-item-content>
-        </v-list-item>
-
-        <v-list-item v-if="!isLoggedIn" v-on:click="login()">
+        <v-list-item v-if="user.isAnonymous" v-on:click="login()">
           <v-list-item-action>
             <v-icon>mdi-login</v-icon>
           </v-list-item-action>
           <v-list-item-content>Login</v-list-item-content>
         </v-list-item>
 
-        <v-list-item v-if="isLoggedIn" v-on:click="logout()">
+        <v-list-item v-if="!user.isAnonymous" v-on:click="logout()">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
           </v-list-item-action>
@@ -82,25 +75,13 @@ export default {
       return this.$store.state.error
     },
 
-    isLoggedIn: function() {
-      return this.$store.getters.user != null
-    },
-
-    displayName: function() {
-      if (this.$store.getters.user != null) {
-        return this.$store.getters.user.displayName
-      } else {
-        return 'Parrent Parrot'
-      }
-    },
-
-    photoURL: function() {
-      if (this.$store.getters.user != null) {
-        return this.$store.getters.user.photoURL
-      } else {
-        return 'images/parrot-192.png'
-      }
+    user: function() {
+      return this.$store.getters.user
     }
+  },
+
+  created: function() {
+    this.$store.dispatch('init')
   },
 
   methods: {
@@ -113,17 +94,14 @@ export default {
       this.toggleDrawer()
     },
 
-    clearClips: function() {
-      this.$store.dispatch("clearClips")
-      this.toggleDrawer()
-    },
-
     login: function() {
       this.$store.dispatch('login')
+      this.toggleDrawer()
     },
 
     logout: function() {
       this.$store.dispatch('logout')
+      this.toggleDrawer()
     }
   }
 }
