@@ -23,6 +23,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
+db.enablePersistence()
 
 const ANONYMOUS_USER = {
   displayName: 'Parrent Parrot',
