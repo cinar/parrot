@@ -26,7 +26,7 @@ npm run serve
 
 ## License
 
-Icons made by (Freepik)["https://www.flaticon.com/authors/freepik"] from (Flaticon)["https://www.flaticon.com/"].
+Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com/).
 
 Copyright (c) 2019 Onur Cinar. All Rights Reserved.
 
