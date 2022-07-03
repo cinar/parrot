@@ -10,14 +10,14 @@ import { vuexfireMutations, firestoreAction } from 'vuexfire'
 Vue.use(Vuex)
 
 const firebaseConfig = {
-  apiKey: "***REMOVED***",
-  authDomain: "***REMOVED***",
-  databaseURL: "***REMOVED***",
+  apiKey: "REMOVED",
+  authDomain: "REMOVED",
+  databaseURL: "REMOVED",
   projectId: "parent-parrot",
-  storageBucket: "***REMOVED***",
-  messagingSenderId: "***REMOVED***",
-  appId: "***REMOVED***",
-  measurementId: "***REMOVED***"
+  storageBucket: "REMOVED",
+  messagingSenderId: "REMOVED",
+  appId: "REMOVED",
+  measurementId: "REMOVED"
 }
 
 firebase.initializeApp(firebaseConfig)
