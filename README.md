@@ -1,29 +1,34 @@
-# parrot
+# Parent Parrot
 
-## Project setup
-```
+I was looking for a fun project to explore building an audio recorded and player within the browser using JavaScript, and Parent Parrot is the result. If you find yourself saying things over and over to your kids, Parent Parrot comes for rescue. It will enable you to record your frequently used sentences, such as _finish your food_, _be quite_, and play them back to your kids as many times as needed.
+
+## Building Project
+
+Start by installing the dependencies.
+
+```bash
 npm install
 ```
 
-### Compiles and hot-reloads for development
+Compile and minify the project.
+
+```bash
+npm run build
+```
+
+## Running Locally
+
+Start the web server.
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## License
 
-### Run your tests
-```
-npm run test
-```
+Icons made by (Freepik)["https://www.flaticon.com/authors/freepik"] from (Flaticon)["https://www.flaticon.com/"].
 
-### Lints and fixes files
-```
-npm run lint
-```
+Copyright (c) 2019 Onur Cinar. All Rights Reserved.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+The source code is provided under GNU GPL Version 3 License.
+
