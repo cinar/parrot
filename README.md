@@ -2,6 +2,8 @@
 
 I was looking for a fun project to explore building an audio recorded and player within the browser using JavaScript, and Parent Parrot is the result. If you find yourself saying things over and over to your kids, Parent Parrot comes for rescue. It will enable you to record your frequently used sentences, such as _finish your food_, _be quite_, and play them back to your kids as many times as needed.
 
+![Parent Parrot](screenshot.png)
+
 ## Building Project
 
 Start by installing the dependencies.
